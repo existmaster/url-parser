@@ -17,6 +17,7 @@ public class UrlParserTest {
     private URLParser urlParser;
     private URLModel urlModel;
 
+
     @Before
     public void setUp() throws Exception {
         urlParser = new URLParser();
@@ -45,9 +46,21 @@ public class UrlParserTest {
         assertEquals("80", urlModel.getPort());
 
     }
-    @Test(expected = AssertionError.class)
-    public void URLCheck_WrongProtocol_ExpectedException(){
-        urlModel = urlParser.parseUrl("http2://www.naver.com:8080/subdir");
+    @Test
+    public void URLCheck_WrongValues_ExpectedException(){
+        wrongValues_check("http2://www.naver.com:8080/subdir");
+        wrongValues_check("http://:8080/sub");
+        wrongValues_check("http:/www.naver.com:8080/sub");
+    }
+
+    public void wrongValues_check(String url) {
+        try {
+            urlParser.parseUrl(url);
+        }
+        catch(AssertionError e){
+            return;
+        }
+        fail();
     }
 
 }
